@@ -207,7 +207,7 @@ export function StakeCard() {
           <button
             onClick={stake}
             disabled={busy || parsed === 0n || belowMin || insufficient}
-            className="w-full py-4 bg-ink text-paper smallcaps text-base font-semibold tracking-wider hover:bg-navy transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full py-4 bg-ink text-paper smallcaps text-base font-semibold tracking-wider hover:bg-lobster transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {step === "approving" && "Approving in wallet…"}
             {step === "staking" && "Recording the deposit on-chain…"}

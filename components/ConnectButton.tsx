@@ -34,7 +34,7 @@ export function ConnectButton({ className = "" }: { className?: string }) {
       <button
         onClick={() => setOpen(v => !v)}
         disabled={isPending}
-        className="smallcaps text-sm font-semibold px-5 py-2.5 bg-ink text-paper border border-paper/50 hover:bg-navy transition-colors disabled:opacity-50"
+        className="smallcaps text-sm font-semibold px-5 py-2.5 bg-ink text-paper border border-paper/50 hover:bg-lobster transition-colors disabled:opacity-50"
       >
         {isPending ? "Connecting…" : "Connect Wallet"}
       </button>

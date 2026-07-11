@@ -18,11 +18,13 @@ function Seal({ className = "" }: { className?: string }) {
       <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" strokeWidth="2" />
       <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" strokeWidth="1" />
       <circle cx="100" cy="100" r="52" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <text fontSize="15.5" letterSpacing="3.5" fill="currentColor" fontFamily="Georgia, serif">
-        <textPath href="#sealcircle" startOffset="0%">
-          CONVICTION BANK · EST. 2026 ·
-        </textPath>
-      </text>
+      <g className="spin-ring">
+        <text fontSize="15.5" letterSpacing="3.5" fill="currentColor" fontFamily="Georgia, serif">
+          <textPath href="#sealcircle" startOffset="0%">
+            CONVICTION BANK · EST. 2026 ·
+          </textPath>
+        </text>
+      </g>
       <text x="100" y="122" textAnchor="middle" fontSize="58" fontFamily="Georgia, serif" fontWeight="bold" fill="currentColor">
         CV
       </text>
@@ -73,7 +75,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <Seal className="w-56 h-56 lg:w-72 lg:h-72 text-paper/85 animate-spin-slow shrink-0 mx-auto" />
+        <Seal className="w-56 h-56 lg:w-72 lg:h-72 text-paper/85 shrink-0 mx-auto" />
       </section>
 
       {/* Trust strip */}
@@ -143,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* Commission an audit */}
-      <section id="commission" className="bg-navy text-paper py-20 scroll-mt-8">
+      <section id="commission" className="bg-lobster-night text-paper py-20 scroll-mt-8">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-start">
           <div>
             <p className="smallcaps text-sm font-semibold text-gold-bright mb-3">Engage the firm</p>
@@ -217,7 +219,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-navy text-paper/70 py-12 text-sm">
+      <footer className="bg-lobster-night text-paper/70 py-12 text-sm">
         <div className="max-w-6xl mx-auto px-6 grid sm:grid-cols-3 gap-8">
           <div>
             <p className="font-display text-paper text-lg mb-2">Clawdviction</p>

@@ -216,7 +216,7 @@ export function AuditCard() {
           <button
             onClick={submit}
             disabled={!canSubmit}
-            className="w-full py-4 bg-ink text-paper smallcaps text-base font-semibold tracking-wider hover:bg-navy transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full py-4 bg-ink text-paper smallcaps text-base font-semibold tracking-wider hover:bg-lobster transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {step === "signing" && "Sign the conviction note in your wallet…"}
             {step === "spending" && "Settling from your conviction…"}
