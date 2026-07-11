@@ -9,58 +9,60 @@ import {
   STAKING_ADDRESS,
 } from "@/lib/contracts";
 
-/* Pixel-art claw holding a magnifying glass — the shop sign.
- * Edit the map: G lens rim · s shine · H handle · C claw · D claw shade */
-const PIXEL_MAP = [
-  "...........GGGGG.......",
-  "..........G.....G......",
-  ".........G.ss....G.....",
-  "........G.s.......G....",
-  "........G.s.......G....",
-  "........G.........G....",
-  "........G.........G....",
-  "........G.........G....",
-  ".........G.......G.....",
-  "..........G.....G......",
-  "...........GGGGG.......",
-  "......CC....HH.........",
-  ".....CCCC...HH.........",
-  "....CCCCCC..HH.........",
-  "....CCCCCCC.HH.CCCC....",
-  "....CCCCCCC....CCCCC...",
-  "....CCCCCCCC..CCCCCC...",
-  "....CCCCCCCCCCCCCCCC...",
-  "....CLLCCCCCCCCCCCCC...",
-  "....CCCCCCCCCCCCCCCD...",
-  ".....CCCCCCCCCCCCCD....",
-  "......CCCCCCCCCCCDCC...",
-  "........CCCCCCCD..CCC..",
-  "...........DDDD....DD..",
+/* The shop sign: LeftClaw's own pixel-art claw (public/leftclaw.png, from
+ * leftclaw.services) reaching for a pixel magnifying glass. The glass map:
+ * G lens rim · s shine · H handle (angled down-left toward the claw) */
+const GLASS_MAP = [
+  ".........GGGGG...",
+  "........G.....G..",
+  ".......G.ss....G.",
+  "......G.s.......G",
+  "......G.s.......G",
+  "......G.........G",
+  "......G.........G",
+  "......G.........G",
+  ".......G.......G.",
+  "........G.....G..",
+  ".......HHGGGGG...",
+  "......HH.........",
+  ".....HH..........",
+  "....HH...........",
 ];
 
-const PIXEL_COLORS: Record<string, string> = {
+const GLASS_COLORS: Record<string, string> = {
   G: "#c9a53e",
   s: "#f6f3ea",
   H: "#a8862c",
-  C: "#e2654a",
-  D: "#b3402a",
-  L: "#f0937c",
 };
 
-function PixelClaw({ className = "" }: { className?: string }) {
+function PixelGlass({ className = "" }: { className?: string }) {
   return (
     <svg
-      viewBox={`0 0 ${PIXEL_MAP[0].length} ${PIXEL_MAP.length}`}
+      viewBox={`0 0 ${GLASS_MAP[0].length} ${GLASS_MAP.length}`}
       className={className}
       shapeRendering="crispEdges"
       aria-hidden
     >
-      {PIXEL_MAP.flatMap((row, y) =>
+      {GLASS_MAP.flatMap((row, y) =>
         [...row].map((c, x) =>
-          PIXEL_COLORS[c] ? <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={PIXEL_COLORS[c]} /> : null,
+          GLASS_COLORS[c] ? <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={GLASS_COLORS[c]} /> : null,
         ),
       )}
     </svg>
+  );
+}
+
+function ClawMark({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative ${className}`} aria-hidden>
+      <PixelGlass className="absolute top-0 right-0 w-[62%]" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/leftclaw.png"
+        alt=""
+        className="absolute bottom-0 left-0 w-[58%] [image-rendering:pixelated]"
+      />
+    </div>
   );
 }
 
@@ -109,7 +111,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <PixelClaw className="w-56 h-56 lg:w-72 lg:h-72 float-slow shrink-0 mx-auto" />
+        <ClawMark className="w-56 h-64 lg:w-72 lg:h-80 float-slow shrink-0 mx-auto" />
       </section>
 
       {/* Trust strip */}
