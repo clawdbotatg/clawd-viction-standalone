@@ -10,9 +10,10 @@
   --color-gold-bright: #c9a53e;
   --color-seal: #9c2b23;
   --color-mint: #1b6e53;
-  --color-lobster: #5a1a13;
-  --color-lobster-deep: #4a1510;
-  --color-lobster-night: #350e09;
+  /* Matched to the hero illustration's flat background so it blends in */
+  --color-lobster: #540e0a;
+  --color-lobster-deep: #440c08;
+  --color-lobster-night: #300805;
   --color-lobster-line: #7d3a2c;
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-inter), system-ui, sans-serif;

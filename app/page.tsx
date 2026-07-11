@@ -9,61 +9,17 @@ import {
   STAKING_ADDRESS,
 } from "@/lib/contracts";
 
-/* The shop sign: LeftClaw's own pixel-art claw (public/leftclaw.png, from
- * leftclaw.services) reaching for a pixel magnifying glass. The glass map:
- * G lens rim · s shine · H handle (angled down-left toward the claw) */
-const GLASS_MAP = [
-  ".........GGGGG...",
-  "........G.....G..",
-  ".......G.ss....G.",
-  "......G.s.......G",
-  "......G.s.......G",
-  "......G.........G",
-  "......G.........G",
-  "......G.........G",
-  ".......G.......G.",
-  "........G.....G..",
-  ".......HHGGGGG...",
-  "......HH.........",
-  ".....HH..........",
-  "....HH...........",
-  "...HH............",
-];
-
-const GLASS_COLORS: Record<string, string> = {
-  G: "#c9a53e",
-  s: "#f6f3ea",
-  H: "#a8862c",
-};
-
-function PixelGlass({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox={`0 0 ${GLASS_MAP[0].length} ${GLASS_MAP.length}`}
-      className={className}
-      shapeRendering="crispEdges"
-      aria-hidden
-    >
-      {GLASS_MAP.flatMap((row, y) =>
-        [...row].map((c, x) =>
-          GLASS_COLORS[c] ? <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={GLASS_COLORS[c]} /> : null,
-        ),
-      )}
-    </svg>
-  );
-}
-
+/* The shop sign: a pixel-art claw inspecting Solidity code through a
+ * magnifying glass (public/claw-audit.png). Its flat background is the
+ * same color as --color-lobster, so it dissolves into the page. */
 function ClawMark({ className = "" }: { className?: string }) {
   return (
-    <div className={`relative ${className}`} aria-hidden>
-      <PixelGlass className="absolute left-[19%] top-[3%] w-[62%]" />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/leftclaw.png"
-        alt=""
-        className="absolute bottom-0 left-0 w-[58%] [image-rendering:pixelated]"
-      />
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/claw-audit.png"
+      alt="A lobster claw inspecting Solidity code through a magnifying glass"
+      className={className}
+    />
   );
 }
 
@@ -123,7 +79,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <ClawMark className="w-56 h-64 lg:w-72 lg:h-80 float-slow shrink-0 mx-auto" />
+        <ClawMark className="w-72 lg:w-96 float-slow shrink-0 mx-auto" />
       </section>
 
       {/* Trust strip */}
