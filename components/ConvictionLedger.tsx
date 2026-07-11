@@ -148,10 +148,13 @@ export function ConvictionLedger() {
             </div>
 
             <p className="text-xs text-ink-soft/70 leading-relaxed">
-              Kept by the same ledger larv.ai uses. The counter starts climbing
-              the moment your deposit lands; the spendable balance follows
-              within a few minutes. Unstaking banks what you&apos;ve earned,
-              forever.
+              Kept by the same ledger{" "}
+              <a href="https://larv.ai" className="underline hover:text-gold" target="_blank" rel="noopener noreferrer">
+                larv.ai
+              </a>{" "}
+              uses. The counter starts climbing the moment your deposit lands;
+              the spendable balance follows within a few minutes. Unstaking
+              banks what you&apos;ve earned, forever.
             </p>
           </>
         )}

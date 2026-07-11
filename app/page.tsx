@@ -87,7 +87,15 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-20 grid md:grid-cols-[1fr_auto] gap-12 items-center">
         <div>
           <p className="smallcaps text-sm font-semibold text-gold-bright mb-4">
-            The staking desk of One Dollar Audit · same vault larv.ai stakes into · Base
+            The staking desk of{" "}
+            <a href="https://onedollaraudit.com" className="underline hover:text-paper" target="_blank" rel="noopener noreferrer">
+              One Dollar Audit
+            </a>{" "}
+            · same vault{" "}
+            <a href="https://larv.ai" className="underline hover:text-paper" target="_blank" rel="noopener noreferrer">
+              larv.ai
+            </a>{" "}
+            stakes into · Base
           </p>
           <h1 className="font-display text-5xl sm:text-7xl font-semibold leading-[1.05] tracking-tight">
             Stake $CLAWD.
@@ -97,8 +105,11 @@ export default function Home() {
           <p className="mt-6 text-lg text-paper/75 max-w-xl leading-relaxed">
             Deposit $CLAWD and conviction accrues to your name every second —
             your stake, multiplied by time. No yield games, no lock-ups, no
-            forfeits. Spend it on AI smart-contract security audits from the
-            One Dollar Audit pipeline — a fee paid in patience, not dollars.
+            forfeits. Spend it on AI smart-contract security audits from the{" "}
+            <a href="https://onedollaraudit.com" className="underline decoration-paper/40 hover:text-gold-bright" target="_blank" rel="noopener noreferrer">
+              One Dollar Audit
+            </a>{" "}
+            pipeline — a fee paid in patience, not dollars.
           </p>
           <div className="mt-8 flex flex-wrap gap-4 items-center">
             <a
@@ -121,7 +132,13 @@ export default function Home() {
           <span>🥩 Stake <strong>$CLAWD</strong> on Base</span>
           <span>⏱️ Conviction accrues <strong>every second</strong></span>
           <span>🏦 Withdraw anytime — <strong>conviction is banked, never lost</strong></span>
-          <span>🛡️ Audits by the <strong>One Dollar Audit</strong> pipeline</span>
+          <span>
+            🛡️ Audits by the{" "}
+            <a href="https://onedollaraudit.com" className="underline hover:text-gold-bright" target="_blank" rel="noopener noreferrer">
+              <strong>One Dollar Audit</strong>
+            </a>{" "}
+            pipeline
+          </span>
         </div>
       </div>
 
@@ -135,17 +152,40 @@ export default function Home() {
             {
               n: "I",
               t: "Make your deposit",
-              d: "Stake 1,000 CLAWD or more into the vault on Base — the same contract larv.ai uses. Your tokens stay yours; withdraw any deposit, whole, at any time.",
+              d: (
+                <>
+                  Stake 1,000 CLAWD or more into the vault on Base — the same contract{" "}
+                  <a href="https://larv.ai" className="underline hover:text-gold" target="_blank" rel="noopener noreferrer">
+                    larv.ai
+                  </a>{" "}
+                  uses. Your tokens stay yours; withdraw any deposit, whole, at any time.
+                </>
+              ),
             },
             {
               n: "II",
               t: "Let time compound",
-              d: "Conviction is stake × time: every CLAWD you hold staked earns it, every second. One CLAWD staked twenty days is one CV. Unstaking banks what you've earned — nothing is ever forfeited.",
+              d: (
+                <>
+                  Conviction is stake × time: every CLAWD you hold staked earns it, every second.
+                  One CLAWD staked twenty days is one CV. Unstaking banks what you&apos;ve earned —
+                  nothing is ever forfeited.
+                </>
+              ),
             },
             {
               n: "III",
               t: "Spend it on audits",
-              d: "Conviction is currency here. Commission an AI security audit — the same pipeline behind onedollaraudit.com — and settle the fee from your conviction, no dollars required.",
+              d: (
+                <>
+                  Conviction is currency here. Commission an AI security audit — the same pipeline
+                  behind{" "}
+                  <a href="https://onedollaraudit.com" className="underline hover:text-gold" target="_blank" rel="noopener noreferrer">
+                    onedollaraudit.com
+                  </a>{" "}
+                  — and settle the fee from your conviction, no dollars required.
+                </>
+              ),
             },
           ].map(s => (
             <div key={s.n} className="border border-line bg-paper text-ink p-6">
@@ -243,7 +283,13 @@ export default function Home() {
             <h3 className="smallcaps font-semibold text-ink-soft">The mechanics</h3>
             <ol className="space-y-3 text-ink-soft leading-relaxed list-decimal list-inside">
               <li>Stake CLAWD → <code className="font-mono text-xs bg-paper-dark px-1">stake(amount)</code> on the vault contract</li>
-              <li>Conviction accrues on-chain; the larv.ai ledger tracks the spendable balance</li>
+              <li>
+                Conviction accrues on-chain; the{" "}
+                <a href="https://larv.ai" className="underline hover:text-gold" target="_blank" rel="noopener noreferrer">
+                  larv.ai
+                </a>{" "}
+                ledger tracks the spendable balance
+              </li>
               <li>Sign <code className="font-mono text-xs bg-paper-dark px-1">&quot;larv.ai CV Spend&quot;</code> → <code className="font-mono text-xs bg-paper-dark px-1">POST /api/cv-spend</code> debits the fee</li>
               <li><code className="font-mono text-xs bg-paper-dark px-1">postJobWithCV(4, cv, desc)</code> files the job → poll <code className="font-mono text-xs bg-paper-dark px-1">/api/jobs/ID</code></li>
             </ol>
