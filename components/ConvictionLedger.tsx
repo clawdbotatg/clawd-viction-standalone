@@ -21,13 +21,20 @@ function tickingParts(v: number, rate: number): { int: string; frac: string } {
 
 /** The statement of account.
  *
- * The headline counter is anchored to the CHAIN: getClawdviction(user) is
- * exact from the second a stake lands, survives reloads, and only ever
- * grows. The larv.ai ledger is fetched per page load for what the chain
- * can't know (spends, pre-v2 history) — its figure is merged as a floor,
- * never as a snap-down: larv.ai's accrual rate updates on a slow cron, so
- * right after staking it undercounts, and trusting it blindly is what made
- * the counter jump backwards and reset on reload. */
+ * Predictive ledger display. larv.ai's ledger works like this (read from its
+ * source): the DB holds (balance, accrualRate, lastAccruedAt); its API
+ * returns the live line `clawdviction = balance + rate × elapsed`; the cron
+ * (~5 min) materializes that same line and swaps the rate to the current
+ * on-chain totalStaked — so the ledger's value is CONTINUOUS at every cron
+ * tick, only its slope changes.
+ *
+ * We therefore anchor at the API's value once per page load and tick at
+ * max(ledger rate, on-chain rate): the chain rate is what the ledger's slope
+ * becomes at the next cron, so the extrapolation lands on the ledger's own
+ * line — and a fresh stake starts counting the moment it lands instead of
+ * waiting out the cron. Background refetches only re-sync along that line;
+ * a monotonic clamp guarantees the counter never ticks downward (the one
+ * legitimate drop is a real spend, which arrives as totalSpent rising). */
 export function ConvictionLedger() {
   const { address } = useAccount();
   const { account, error, refresh } = useConviction(address);
@@ -47,14 +54,11 @@ export function ConvictionLedger() {
     functionName: "totalStaked", args: address ? [address] : undefined,
     query: { refetchInterval: 12_000 },
   });
-  const {
-    data: chainCV,
-    dataUpdatedAt: chainCVAt,
-    refetch: refetchChainCV,
-  } = useReadContract({
+  // Only consulted when the ledger API is unreachable.
+  const { data: chainCV } = useReadContract({
     chainId: BASE_CHAIN_ID, address: STAKING_ADDRESS, abi: STAKING_ABI,
     functionName: "getClawdviction", args: address ? [address] : undefined,
-    query: { refetchInterval: 15_000 },
+    query: { refetchInterval: 30_000, enabled: !!address && error },
   });
 
   // The moment a stake/unstake confirms, StakeCard fires this — re-read the
@@ -62,50 +66,57 @@ export function ConvictionLedger() {
   useEffect(() => {
     const onStaked = () => {
       refetchStaked();
-      refetchChainCV();
       refresh();
     };
     window.addEventListener("cv:staked", onStaked);
     return () => window.removeEventListener("cv:staked", onStaked);
-  }, [refetchStaked, refetchChainCV, refresh]);
+  }, [refetchStaked, refresh]);
 
+  // Slope of the prediction: the ledger's stored rate, or the on-chain rate
+  // the ledger will switch to at its next cron tick — whichever is higher
+  // (after a fresh stake the chain leads; after an unstake the ledger's
+  // stale-high rate is what it will actually credit until the cron).
   const chainRatePerSec = staked ? Number(formatEther(staked)) / 1_728_000 : 0;
   const ratePerSec = Math.max(account?.accrualRate ?? 0, chainRatePerSec);
   const perDay = ratePerSec * 86_400;
 
   const totalSpent = account?.totalSpent ?? 0;
 
-  // Chain-anchored live figure: exact earned-conviction at last read, plus
-  // accrual since, minus what the ledger says was spent.
-  const chainLive =
-    chainCV !== undefined
-      ? Number(chainCV) / CV_DIVISOR_NUM +
-        chainRatePerSec * Math.max(0, (nowMs - chainCVAt) / 1000) -
-        totalSpent
-      : null;
-
-  // Ledger-anchored live figure (covers pre-v2 history the chain can't see).
-  const apiLive =
+  // The ledger's exact line right now (what the cron will materialize).
+  const ledgerLine =
     !error && account
       ? account.clawdviction + account.accrualRate * Math.max(0, (nowMs - account.fetchedAt) / 1000)
-      : null;
+      : error && chainCV !== undefined
+        ? Number(chainCV) / CV_DIVISOR_NUM
+        : null;
 
-  const candidate =
-    chainLive !== null && apiLive !== null
-      ? Math.max(chainLive, apiLive)
-      : chainLive ?? apiLive;
-
-  // Monotonic clamp: the counter never ticks downward. The only legitimate
-  // decrease is an actual spend, which shows up as totalSpent rising — that
-  // resets the clamp.
-  const clampRef = useRef<{ address?: string; spent: number; floor: number }>({ spent: 0, floor: 0 });
-  if (clampRef.current.address !== address || totalSpent > clampRef.current.spent) {
-    clampRef.current = { address, spent: totalSpent, floor: 0 };
+  // Glide reconciliation: the displayed figure is its own line — it ticks up
+  // at the predicted slope every second, and any excess over the ledger's
+  // line decays exponentially (τ = 10 min), so the counter climbs without
+  // ever freezing or dropping and converges exactly onto the ledger. The one
+  // legitimate drop is a real spend (totalSpent rises), which re-anchors.
+  const GLIDE_TAU_S = 600;
+  const predRef = useRef<{ address?: string; spent: number; value: number | null; lastMs: number }>({
+    spent: 0, value: null, lastMs: 0,
+  });
+  const pred = predRef.current;
+  if (pred.address !== address || totalSpent > pred.spent) {
+    predRef.current = { address, spent: totalSpent, value: ledgerLine, lastMs: nowMs };
+  } else if (ledgerLine !== null) {
+    if (pred.value === null) {
+      pred.value = ledgerLine;
+      pred.lastMs = nowMs;
+    } else if (nowMs > pred.lastMs) {
+      const dt = (nowMs - pred.lastMs) / 1000;
+      const ticked = pred.value + ratePerSec * dt;
+      const gap = Math.max(0, ticked - ledgerLine);
+      const next = ledgerLine + gap * Math.exp(-dt / GLIDE_TAU_S);
+      // Ride the ledger line when it's ahead; never render a decrease.
+      pred.value = Math.max(pred.value, Math.max(ledgerLine, next));
+      pred.lastMs = nowMs;
+    }
   }
-  const headline = candidate !== null ? Math.max(candidate, clampRef.current.floor) : null;
-  if (headline !== null && headline > clampRef.current.floor) {
-    clampRef.current.floor = headline;
-  }
+  const headline = predRef.current.value;
 
   const stakedNum = staked ? Number(formatEther(staked)) : 0;
 
