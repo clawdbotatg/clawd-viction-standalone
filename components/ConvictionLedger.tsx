@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatEther } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 import {
@@ -8,12 +8,9 @@ import {
   STAKING_ABI,
   STAKING_ADDRESS,
 } from "@/lib/contracts";
-import { formatCV, useConviction, weiSecondsToCV } from "@/lib/conviction";
+import { CV_DIVISOR_NUM, formatCV, useConviction } from "@/lib/conviction";
 import { useClawdPrice } from "@/lib/prices";
 
-/** The statement of account: live-ticking conviction, accrual rate, stake
- * position. Ledger truth comes from larv.ai's conviction API (which nets out
- * spends); the chain supplies the stake position and a fallback figure. */
 /** Split a ticking figure so every second visibly moves it: show just enough
  * decimals that one second of accrual changes the last digit. */
 function tickingParts(v: number, rate: number): { int: string; frac: string } {
@@ -22,6 +19,15 @@ function tickingParts(v: number, rate: number): { int: string; frac: string } {
   return { int: Number(i).toLocaleString("en-US"), frac: f ? `.${f}` : "" };
 }
 
+/** The statement of account.
+ *
+ * The headline counter is anchored to the CHAIN: getClawdviction(user) is
+ * exact from the second a stake lands, survives reloads, and only ever
+ * grows. The larv.ai ledger is fetched per page load for what the chain
+ * can't know (spends, pre-v2 history) — its figure is merged as a floor,
+ * never as a snap-down: larv.ai's accrual rate updates on a slow cron, so
+ * right after staking it undercounts, and trusting it blindly is what made
+ * the counter jump backwards and reset on reload. */
 export function ConvictionLedger() {
   const { address } = useAccount();
   const { account, error, refresh } = useConviction(address);
@@ -41,10 +47,14 @@ export function ConvictionLedger() {
     functionName: "totalStaked", args: address ? [address] : undefined,
     query: { refetchInterval: 12_000 },
   });
-  const { data: chainCV } = useReadContract({
+  const {
+    data: chainCV,
+    dataUpdatedAt: chainCVAt,
+    refetch: refetchChainCV,
+  } = useReadContract({
     chainId: BASE_CHAIN_ID, address: STAKING_ADDRESS, abi: STAKING_ABI,
     functionName: "getClawdviction", args: address ? [address] : undefined,
-    query: { refetchInterval: 30_000, enabled: !!address && error },
+    query: { refetchInterval: 15_000 },
   });
 
   // The moment a stake/unstake confirms, StakeCard fires this — re-read the
@@ -52,30 +62,50 @@ export function ConvictionLedger() {
   useEffect(() => {
     const onStaked = () => {
       refetchStaked();
+      refetchChainCV();
       refresh();
     };
     window.addEventListener("cv:staked", onStaked);
     return () => window.removeEventListener("cv:staked", onStaked);
-  }, [refetchStaked, refresh]);
+  }, [refetchStaked, refetchChainCV, refresh]);
 
-  // The ledger's accrual rate lags a fresh stake by a few minutes (larv.ai
-  // materializes on a cron) — so tick at the on-chain rate when it's higher.
-  // Chain position updates seconds after the stake tx, so the counter starts
-  // climbing immediately.
   const chainRatePerSec = staked ? Number(formatEther(staked)) / 1_728_000 : 0;
   const ratePerSec = Math.max(account?.accrualRate ?? 0, chainRatePerSec);
   const perDay = ratePerSec * 86_400;
 
-  // Headline figure: larv.ai ledger base (spends netted out) + live accrual
-  // since fetch; if the ledger is unreachable, the on-chain lifetime figure.
-  const headline =
+  const totalSpent = account?.totalSpent ?? 0;
+
+  // Chain-anchored live figure: exact earned-conviction at last read, plus
+  // accrual since, minus what the ledger says was spent.
+  const chainLive =
+    chainCV !== undefined
+      ? Number(chainCV) / CV_DIVISOR_NUM +
+        chainRatePerSec * Math.max(0, (nowMs - chainCVAt) / 1000) -
+        totalSpent
+      : null;
+
+  // Ledger-anchored live figure (covers pre-v2 history the chain can't see).
+  const apiLive =
     !error && account
-      ? account.clawdviction + ratePerSec * Math.max(0, (nowMs - account.fetchedAt) / 1000)
-      : !error
-        ? null
-        : chainCV !== undefined
-          ? weiSecondsToCV(chainCV)
-          : null;
+      ? account.clawdviction + account.accrualRate * Math.max(0, (nowMs - account.fetchedAt) / 1000)
+      : null;
+
+  const candidate =
+    chainLive !== null && apiLive !== null
+      ? Math.max(chainLive, apiLive)
+      : chainLive ?? apiLive;
+
+  // Monotonic clamp: the counter never ticks downward. The only legitimate
+  // decrease is an actual spend, which shows up as totalSpent rising — that
+  // resets the clamp.
+  const clampRef = useRef<{ address?: string; spent: number; floor: number }>({ spent: 0, floor: 0 });
+  if (clampRef.current.address !== address || totalSpent > clampRef.current.spent) {
+    clampRef.current = { address, spent: totalSpent, floor: 0 };
+  }
+  const headline = candidate !== null ? Math.max(candidate, clampRef.current.floor) : null;
+  if (headline !== null && headline > clampRef.current.floor) {
+    clampRef.current.floor = headline;
+  }
 
   const stakedNum = staked ? Number(formatEther(staked)) : 0;
 
@@ -116,7 +146,7 @@ export function ConvictionLedger() {
               </p>
               {error && (
                 <p className="mt-2 text-xs text-ink-soft/70">
-                  Ledger unreachable — showing the on-chain lifetime figure (spends not deducted).
+                  Ledger unreachable — counting from the chain (spends not deducted).
                 </p>
               )}
             </div>

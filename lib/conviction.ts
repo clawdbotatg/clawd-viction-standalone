@@ -6,6 +6,9 @@ import { LARV_APP } from "./contracts";
 /** On-chain conviction is raw token-wei × seconds. larv.ai's ledger divides by
  * this to get human "CV": 20M CLAWD staked for 24h = 1,000,000 CV. */
 export const CV_DIVISOR = 1_728_000n * 10n ** 18n;
+/** Float twin for display math — dividing as Numbers keeps the sub-CV
+ * precision the live-ticking counter needs (BigInt division floors it away). */
+export const CV_DIVISOR_NUM = 1_728_000 * 1e18;
 
 /** The fixed message larv.ai's spend API verifies. Must match exactly. */
 export const CV_SIGN_MESSAGE = "larv.ai CV Spend";
@@ -140,7 +143,3 @@ export function formatCV(n: number | bigint | null | undefined): string {
   return Math.floor(Number(n)).toLocaleString("en-US");
 }
 
-/** Raw on-chain wei-seconds → human CV. */
-export function weiSecondsToCV(raw: bigint): number {
-  return Number(raw / CV_DIVISOR);
-}
