@@ -160,7 +160,7 @@ export function AuditCard() {
   }
 
   return (
-    <div className="border border-line bg-paper shadow-xl">
+    <div className="border border-line bg-paper text-ink shadow-xl">
       <div className="border-b border-line bg-paper-dark px-6 py-4 flex items-baseline justify-between">
         <span className="smallcaps text-sm font-semibold text-ink-soft">Engagement Form CV-1</span>
         <span className="font-display text-2xl font-semibold tabular">

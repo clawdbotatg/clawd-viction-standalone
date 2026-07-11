@@ -37,9 +37,9 @@ export default function Home() {
       <header className="max-w-6xl mx-auto px-6 pt-6 flex items-center justify-between">
         <span className="font-display text-lg font-semibold tracking-tight">Clawdviction</span>
         <nav className="flex items-center gap-6 text-sm">
-          <a href="#stake" className="smallcaps hover:text-gold transition-colors hidden sm:inline">Stake</a>
-          <a href="#commission" className="smallcaps hover:text-gold transition-colors hidden sm:inline">Commission</a>
-          <a href="#agents" className="smallcaps hover:text-gold transition-colors hidden sm:inline">For Agents</a>
+          <a href="#stake" className="smallcaps hover:text-gold-bright transition-colors hidden sm:inline">Stake</a>
+          <a href="#commission" className="smallcaps hover:text-gold-bright transition-colors hidden sm:inline">Commission</a>
+          <a href="#agents" className="smallcaps hover:text-gold-bright transition-colors hidden sm:inline">For Agents</a>
           <ConnectButton />
         </nav>
       </header>
@@ -47,38 +47,38 @@ export default function Home() {
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-20 grid md:grid-cols-[1fr_auto] gap-12 items-center">
         <div>
-          <p className="smallcaps text-sm font-semibold text-gold mb-4">
+          <p className="smallcaps text-sm font-semibold text-gold-bright mb-4">
             The conviction bank · same vault larv.ai stakes into · Base network
           </p>
           <h1 className="font-display text-5xl sm:text-7xl font-semibold leading-[1.05] tracking-tight">
-            Stake your CLAWD.
+            Stake $CLAWD.
             <br />
-            <span className="italic">Spend your conviction.</span>
+            <span className="italic">Get free audits.</span>
           </h1>
-          <p className="mt-6 text-lg text-ink-soft max-w-xl leading-relaxed">
+          <p className="mt-6 text-lg text-paper/75 max-w-xl leading-relaxed">
             Deposit $CLAWD and conviction accrues to your name every second —
             your stake, multiplied by time. No yield games, no lock-ups, no
-            forfeits. Then spend what you&apos;ve earned on real work: AI
-            smart-contract security audits from the One Dollar Audit pipeline.
+            forfeits. Spend it on AI smart-contract security audits from the
+            One Dollar Audit pipeline — a fee paid in patience, not dollars.
           </p>
           <div className="mt-8 flex flex-wrap gap-4 items-center">
             <a
               href="#stake"
-              className="smallcaps text-base font-semibold px-8 py-4 bg-ink text-paper hover:bg-navy transition-colors"
+              className="smallcaps text-base font-semibold px-8 py-4 bg-paper text-ink hover:bg-white transition-colors"
             >
               Open a deposit
             </a>
-            <a href="#commission" className="smallcaps text-sm underline decoration-line hover:text-gold">
+            <a href="#commission" className="smallcaps text-sm underline decoration-paper/40 hover:text-gold-bright">
               I have conviction, commission an audit →
             </a>
           </div>
         </div>
-        <Seal className="w-56 h-56 lg:w-72 lg:h-72 text-ink/80 animate-spin-slow shrink-0 mx-auto" />
+        <Seal className="w-56 h-56 lg:w-72 lg:h-72 text-paper/85 animate-spin-slow shrink-0 mx-auto" />
       </section>
 
       {/* Trust strip */}
-      <div className="border-y border-line bg-paper-dark">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex flex-wrap gap-x-10 gap-y-2 text-sm text-ink-soft justify-center">
+      <div className="border-y border-lobster-line bg-lobster-deep">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex flex-wrap gap-x-10 gap-y-2 text-sm text-paper/80 justify-center">
           <span>🥩 Stake <strong>$CLAWD</strong> on Base</span>
           <span>⏱️ Conviction accrues <strong>every second</strong></span>
           <span>🏦 Withdraw anytime — <strong>conviction is banked, never lost</strong></span>
@@ -109,14 +109,14 @@ export default function Home() {
               d: "Conviction is currency here. Commission an AI security audit — the same pipeline behind onedollaraudit.com — and settle the fee from your conviction, no dollars required.",
             },
           ].map(s => (
-            <div key={s.n} className="border border-line bg-white/60 p-6">
+            <div key={s.n} className="border border-line bg-paper text-ink p-6">
               <p className="font-display text-4xl text-gold mb-3">{s.n}.</p>
               <h3 className="font-display text-xl font-semibold mb-2">{s.t}</h3>
               <p className="text-sm text-ink-soft leading-relaxed">{s.d}</p>
             </div>
           ))}
         </div>
-        <p className="mt-8 text-sm text-ink-soft max-w-2xl">
+        <p className="mt-8 text-sm text-paper/75 max-w-2xl">
           Sample of the work:{" "}
           <a
             href="https://github.com/clawdbotatg/leftclaw-services/blob/main/audits/SwapAndBurn-2026-03-06/AUDIT-REPORT.md"
@@ -130,7 +130,7 @@ export default function Home() {
       </section>
 
       {/* The vault — stake & statement */}
-      <section id="stake" className="border-t border-line bg-paper-dark py-20 scroll-mt-8">
+      <section id="stake" className="border-t border-lobster-line bg-lobster-deep py-20 scroll-mt-8">
         <div className="max-w-6xl mx-auto px-6">
           <div className="ledger-rule pt-6 mb-10">
             <h2 className="font-display text-3xl font-semibold">The vault</h2>
@@ -185,13 +185,13 @@ export default function Home() {
         </div>
         <div className="grid md:grid-cols-2 gap-10 items-start">
           <div>
-            <p className="text-ink-soft leading-relaxed">
+            <p className="text-paper/75 leading-relaxed">
               An agent holding staked CLAWD can run this whole desk without a
               browser: read its conviction from the ledger API, sign one
               message, and file audit engagements on-chain. The skill file has
               the complete walkthrough — addresses, ABIs, and the spend flow.
             </p>
-            <p className="mt-4 text-sm text-ink-soft">
+            <p className="mt-4 text-sm text-paper/75">
               Start at{" "}
               <a href="/skill.md" className="underline font-mono">/skill.md</a>
               {" "}— or, for gasless dollar-paid audits, use{" "}
@@ -200,7 +200,7 @@ export default function Home() {
               </a>.
             </p>
           </div>
-          <div className="border border-line bg-white/60 p-6 text-sm space-y-4">
+          <div className="border border-line bg-paper text-ink p-6 text-sm space-y-4">
             <h3 className="smallcaps font-semibold text-ink-soft">The mechanics</h3>
             <ol className="space-y-3 text-ink-soft leading-relaxed list-decimal list-inside">
               <li>Stake CLAWD → <code className="font-mono text-xs bg-paper-dark px-1">stake(amount)</code> on the vault contract</li>

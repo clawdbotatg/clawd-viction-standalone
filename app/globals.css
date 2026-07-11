@@ -12,6 +12,9 @@
   --color-gold-bright: #c9a53e;
   --color-seal: #9c2b23;
   --color-mint: #1b6e53;
+  --color-lobster: #5a1a13;
+  --color-lobster-deep: #4a1510;
+  --color-lobster-line: #7d3a2c;
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-inter), system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
@@ -26,9 +29,10 @@ button:not(:disabled) {
   cursor: pointer;
 }
 
+/* The desk is dark lobster red; the forms on it stay cream paper. */
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--color-lobster);
+  color: var(--color-paper);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
@@ -37,9 +41,10 @@ body {
   font-family: var(--font-display);
 }
 
-/* Engraved ledger rule — double line used under section headings */
+/* Engraved ledger rule — double line used under section headings
+ * (cream on the lobster ground) */
 .ledger-rule {
-  border-top: 1px solid var(--color-ink);
+  border-top: 1px solid var(--color-paper);
   position: relative;
 }
 .ledger-rule::after {
@@ -48,7 +53,7 @@ body {
   top: 3px;
   left: 0;
   right: 0;
-  border-top: 1px solid var(--color-line);
+  border-top: 1px solid var(--color-lobster-line);
 }
 
 .smallcaps {

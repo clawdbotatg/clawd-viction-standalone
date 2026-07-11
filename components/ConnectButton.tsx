@@ -13,7 +13,7 @@ export function ConnectButton({ className = "" }: { className?: string }) {
     return (
       <button
         onClick={() => disconnect()}
-        className={`font-mono text-sm px-4 py-2 border border-line bg-paper-dark hover:bg-paper transition-colors ${className}`}
+        className={`font-mono text-sm px-4 py-2 border border-line bg-paper-dark text-ink hover:bg-paper transition-colors ${className}`}
         title="Disconnect"
       >
         {address.slice(0, 6)}…{address.slice(-4)}
@@ -34,12 +34,12 @@ export function ConnectButton({ className = "" }: { className?: string }) {
       <button
         onClick={() => setOpen(v => !v)}
         disabled={isPending}
-        className="smallcaps text-sm font-semibold px-5 py-2.5 bg-ink text-paper hover:bg-navy transition-colors disabled:opacity-50"
+        className="smallcaps text-sm font-semibold px-5 py-2.5 bg-ink text-paper border border-paper/50 hover:bg-navy transition-colors disabled:opacity-50"
       >
         {isPending ? "Connecting…" : "Connect Wallet"}
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-2 z-20 min-w-48 border border-line bg-paper shadow-lg">
+        <div className="absolute right-0 top-full mt-2 z-20 min-w-48 border border-line bg-paper text-ink shadow-lg">
           {list.map(c => (
             <button
               key={c.uid}

@@ -141,7 +141,7 @@ export function StakeCard() {
   const [amounts, stakedAts, indices] = activeStakes ?? [[], [], []];
 
   return (
-    <div className="border border-line bg-paper shadow-xl">
+    <div className="border border-line bg-paper text-ink shadow-xl">
       <div className="border-b border-line bg-paper-dark px-6 py-4 flex items-baseline justify-between">
         <span className="smallcaps text-sm font-semibold text-ink-soft">Deposit Form 1-B</span>
         <span className="font-display text-2xl font-semibold">CLAWD</span>

@@ -49,7 +49,7 @@ export function ConvictionLedger() {
   if (!mounted) return null;
 
   return (
-    <div className="border border-line bg-white/60">
+    <div className="border border-line bg-paper text-ink shadow-xl">
       <div className="border-b border-line bg-paper-dark px-6 py-4">
         <span className="smallcaps text-sm font-semibold text-ink-soft">Statement of account</span>
       </div>
