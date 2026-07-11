@@ -56,7 +56,7 @@ function PixelGlass({ className = "" }: { className?: string }) {
 function ClawMark({ className = "" }: { className?: string }) {
   return (
     <div className={`relative ${className}`} aria-hidden>
-      <PixelGlass className="absolute left-[24%] top-[3%] w-[62%]" />
+      <PixelGlass className="absolute left-[19%] top-[3%] w-[62%]" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/leftclaw.png"
