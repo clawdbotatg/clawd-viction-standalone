@@ -65,16 +65,11 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* The claw bobs gently — pixel art doesn't spin */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
-.animate-spin-slow {
-  animation: spin-slow 40s linear infinite;
-}
-
-/* Seal: only the ring text revolves — the CV monogram stays upright */
-.spin-ring {
-  animation: spin-slow 40s linear infinite;
-  transform-origin: 100px 100px;
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
 }

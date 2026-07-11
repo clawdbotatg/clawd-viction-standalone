@@ -14,15 +14,29 @@ import { useClawdPrice } from "@/lib/prices";
 /** The statement of account: live-ticking conviction, accrual rate, stake
  * position. Ledger truth comes from larv.ai's conviction API (which nets out
  * spends); the chain supplies the stake position and a fallback figure. */
+/** Split a ticking figure so every second visibly moves it: show just enough
+ * decimals that one second of accrual changes the last digit. */
+function tickingParts(v: number, rate: number): { int: string; frac: string } {
+  const decimals = rate > 0 ? Math.min(6, Math.max(2, Math.ceil(-Math.log10(rate)))) : 0;
+  const [i, f] = v.toFixed(decimals).split(".");
+  return { int: Number(i).toLocaleString("en-US"), frac: f ? `.${f}` : "" };
+}
+
 export function ConvictionLedger() {
   const { address } = useAccount();
-  const { account, live, error } = useConviction(address);
+  const { account, error, refresh } = useConviction(address);
   const clawdPrice = useClawdPrice();
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const { data: staked } = useReadContract({
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const { data: staked, refetch: refetchStaked } = useReadContract({
     chainId: BASE_CHAIN_ID, address: STAKING_ADDRESS, abi: STAKING_ABI,
     functionName: "totalStaked", args: address ? [address] : undefined,
     query: { refetchInterval: 12_000 },
@@ -33,16 +47,35 @@ export function ConvictionLedger() {
     query: { refetchInterval: 30_000, enabled: !!address && error },
   });
 
+  // The moment a stake/unstake confirms, StakeCard fires this — re-read the
+  // chain position and the ledger so the counter reacts instantly.
+  useEffect(() => {
+    const onStaked = () => {
+      refetchStaked();
+      refresh();
+    };
+    window.addEventListener("cv:staked", onStaked);
+    return () => window.removeEventListener("cv:staked", onStaked);
+  }, [refetchStaked, refresh]);
+
   // The ledger's accrual rate lags a fresh stake by a few minutes (larv.ai
-  // materializes on a cron) — derive the live rate from the chain position
-  // so the counter starts moving the moment a stake lands.
+  // materializes on a cron) — so tick at the on-chain rate when it's higher.
+  // Chain position updates seconds after the stake tx, so the counter starts
+  // climbing immediately.
   const chainRatePerSec = staked ? Number(formatEther(staked)) / 1_728_000 : 0;
   const ratePerSec = Math.max(account?.accrualRate ?? 0, chainRatePerSec);
   const perDay = ratePerSec * 86_400;
 
-  // Headline figure: larv.ai ledger (spends netted out); if the ledger is
-  // unreachable, fall back to the on-chain lifetime figure.
-  const headline = !error ? live : chainCV !== undefined ? weiSecondsToCV(chainCV) : null;
+  // Headline figure: larv.ai ledger base (spends netted out) + live accrual
+  // since fetch; if the ledger is unreachable, the on-chain lifetime figure.
+  const headline =
+    !error && account
+      ? account.clawdviction + ratePerSec * Math.max(0, (nowMs - account.fetchedAt) / 1000)
+      : !error
+        ? null
+        : chainCV !== undefined
+          ? weiSecondsToCV(chainCV)
+          : null;
 
   const stakedNum = staked ? Number(formatEther(staked)) : 0;
 
@@ -66,7 +99,14 @@ export function ConvictionLedger() {
             <div>
               <p className="smallcaps text-sm font-semibold text-ink-soft mb-1">Conviction to your name</p>
               <p className="font-display text-5xl font-semibold tabular leading-tight">
-                {headline === null ? "…" : formatCV(headline)}
+                {headline === null ? (
+                  "…"
+                ) : (
+                  <>
+                    {tickingParts(headline, ratePerSec).int}
+                    <span className="text-3xl">{tickingParts(headline, ratePerSec).frac}</span>
+                  </>
+                )}
                 <span className="text-2xl text-ink-soft font-normal"> CV</span>
               </p>
               <p className="mt-1 text-sm text-ink-soft tabular">
@@ -108,9 +148,10 @@ export function ConvictionLedger() {
             </div>
 
             <p className="text-xs text-ink-soft/70 leading-relaxed">
-              Kept by the same ledger larv.ai uses — one balance, two counters.
-              Fresh stakes are recognized within a few minutes; unstaking banks
-              what you&apos;ve earned, forever.
+              Kept by the same ledger larv.ai uses. The counter starts climbing
+              the moment your deposit lands; the spendable balance follows
+              within a few minutes. Unstaking banks what you&apos;ve earned,
+              forever.
             </p>
           </>
         )}

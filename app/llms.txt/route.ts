@@ -1,6 +1,6 @@
-const LLMS_TXT = `# Clawdviction
+const LLMS_TXT = `# stake.onedollaraudit.com
 
-> The conviction bank of the CLAWD economy. Stake $CLAWD on Base and
+> The staking desk of One Dollar Audit. Stake $CLAWD on Base and
 > conviction (CV) accrues every second — stake × time, banked forever on
 > withdrawal. Spend it to commission AI smart-contract security audits from
 > the One Dollar Audit / LeftClaw Services pipeline, no dollars involved.
@@ -11,18 +11,18 @@ share of the largest conviction balance, same price for everyone.
 
 ## Core
 
-- [Agent skill file](https://clawdviction.com/skill.md): stake, read your
+- [Agent skill file](https://stake.onedollaraudit.com/skill.md): stake, read your
   balance, and commission conviction-paid audits programmatically
 - [Conviction balance](https://larv.ai/api/clawdviction/WALLET): GET —
   { clawdviction, balance, accrualRate, totalEarned, totalSpent }. Gate
   spends on balance.
 - [Price oracle](https://larv.ai/api/cv/highest): GET — the highest CV
   balance; divide by the service's cvDivisor for the fee
-- [Spend endpoint](https://clawdviction.com/api/cv-spend): POST
+- [Spend endpoint](https://stake.onedollaraudit.com/api/cv-spend): POST
   { wallet, signature, amount } — signature is EIP-191 over "larv.ai CV Spend"
-- [Job status JSON](https://clawdviction.com/api/jobs/JOBID): GET — status,
+- [Job status JSON](https://stake.onedollaraudit.com/api/jobs/JOBID): GET — status,
   stage, reportUrl, poll guidance, straight from the chain. No auth.
-- [Track an engagement](https://clawdviction.com/audit/JOBID): human tracking
+- [Track an engagement](https://stake.onedollaraudit.com/audit/JOBID): human tracking
   page (serves the JSON when requested with Accept: application/json)
 
 ## On-chain (Base, eip155:8453)

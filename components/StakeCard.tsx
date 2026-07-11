@@ -108,6 +108,7 @@ export function StakeCard() {
       setNotice(`Deposited ${fmt(parsed)} CLAWD — conviction is accruing.`);
       refetchBalance();
       refetchStakes();
+      window.dispatchEvent(new Event("cv:staked"));
     } catch (e: unknown) {
       const err = e as { shortMessage?: string; message?: string };
       setError((err.shortMessage || err.message || String(e)).slice(0, 300));
@@ -130,6 +131,7 @@ export function StakeCard() {
       setNotice(`Withdrew ${fmt(amountWei)} CLAWD — its conviction is banked to your account.`);
       refetchBalance();
       refetchStakes();
+      window.dispatchEvent(new Event("cv:staked"));
     } catch (e: unknown) {
       const err = e as { shortMessage?: string; message?: string };
       setError((err.shortMessage || err.message || String(e)).slice(0, 300));
@@ -173,6 +175,16 @@ export function StakeCard() {
               Max
             </button>
           </div>
+          <p className="mt-2 text-xs text-ink-soft">
+            Need CLAWD?{" "}
+            <a
+              className="underline hover:text-gold"
+              href={`https://app.uniswap.org/swap?outputCurrency=${CLAWD_ADDRESS}&chain=base`}
+              target="_blank" rel="noopener noreferrer"
+            >
+              Get it on Uniswap →
+            </a>
+          </p>
           {belowMin && <p className="mt-2 text-sm text-seal">The house takes deposits of 1,000 CLAWD or more.</p>}
           {insufficient && (
             <p className="mt-2 text-sm text-seal">

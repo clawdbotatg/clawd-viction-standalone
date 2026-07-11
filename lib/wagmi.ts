@@ -6,7 +6,7 @@ export const wagmiConfig = createConfig({
   chains: [base],
   connectors: [
     injected(),
-    coinbaseWallet({ appName: "Clawdviction" }),
+    coinbaseWallet({ appName: "One Dollar Audit — Stake" }),
   ],
   transports: {
     [base.id]: http("https://mainnet.base.org"),

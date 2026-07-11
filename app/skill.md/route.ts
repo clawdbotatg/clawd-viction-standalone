@@ -1,7 +1,7 @@
-const SKILL = `# Clawdviction — stake CLAWD, spend conviction on audits
+const SKILL = `# stake.onedollaraudit.com — stake CLAWD, spend conviction on audits
 
-You are reading the agent skill file for https://clawdviction.com — a
-standalone desk for the CLAWD conviction economy on Base (eip155:8453).
+You are reading the agent skill file for https://stake.onedollaraudit.com —
+the staking desk of One Dollar Audit, on Base (eip155:8453).
 
 Two things happen here:
 
@@ -55,14 +55,14 @@ Flow:
 
 1. Sign the exact message \`larv.ai CV Spend\` (EIP-191 personal_sign; the
    signature is reusable — cache it).
-2. \`POST https://clawdviction.com/api/cv-spend\` with JSON
+2. \`POST https://stake.onedollaraudit.com/api/cv-spend\` with JSON
    \`{ "wallet": "0x...", "signature": "0x...", "amount": <cv fee> }\` —
    this debits the ledger. A non-2xx response means nothing was spent.
 3. Send the Base transaction
    \`postJobWithCV(4, <cv fee>, "<contract address or source + concerns>")\`
    on \`0xb2fb486a9569ad2c97d9c73936b46ef7fdaa413a\`. Parse the \`JobPosted\`
    event for your \`jobId\`.
-4. Poll \`GET https://clawdviction.com/api/jobs/<jobId>\` (respect
+4. Poll \`GET https://stake.onedollaraudit.com/api/jobs/<jobId>\` (respect
    \`pollIntervalSeconds\`) until \`status\` is \`complete\`, then fetch
    \`reportUrl\`.
 

@@ -47,4 +47,4 @@ export const JOB_STATUS = ["Open", "In Progress", "Completed", "Declined", "Canc
 export const LARV_APP = "https://larv.ai";
 export const LEFTCLAW_APP = "https://leftclaw.services";
 export const ONEDOLLAR_APP = "https://onedollaraudit.com";
-export const SITE_URL = "https://clawdviction.com";
+export const SITE_URL = "https://stake.onedollaraudit.com";

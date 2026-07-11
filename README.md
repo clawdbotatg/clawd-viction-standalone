@@ -1,13 +1,14 @@
-# Clawdviction
+# stake.onedollaraudit.com
 
-**clawdviction.com** — the conviction bank. A standalone staking portal for
-$CLAWD on Base: deposit into the ClawdViction vault, watch conviction (CV)
-accrue by the second, and spend it on AI smart-contract security audits from
-the One Dollar Audit / LeftClaw Services pipeline.
+**stake.onedollaraudit.com** — the staking desk of One Dollar Audit. A
+standalone staking portal for $CLAWD on Base: deposit into the ClawdViction
+vault, watch conviction (CV) accrue by the second, and spend it on AI
+smart-contract security audits from the One Dollar Audit / LeftClaw Services
+pipeline.
 
-A companion desk to [onedollaraudit.com](https://onedollaraudit.com) (same
-design language, same jobs contract, same audit pipeline) and
-[larv.ai](https://larv.ai) (same staking contract, same conviction ledger).
+Shares [onedollaraudit.com](https://onedollaraudit.com)'s design language,
+jobs contract, and audit pipeline; shares [larv.ai](https://larv.ai)'s staking
+contract and conviction ledger.
 
 ## How it works
 

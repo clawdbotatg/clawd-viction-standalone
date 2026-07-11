@@ -9,25 +9,54 @@ import {
   STAKING_ADDRESS,
 } from "@/lib/contracts";
 
-function Seal({ className = "" }: { className?: string }) {
+/* Pixel-art claw holding a magnifying glass — the shop sign.
+ * Edit the map: G lens rim · s shine · H handle · C claw · D claw shade */
+const PIXEL_MAP = [
+  ".....GGGGG..............",
+  "....G.....G.............",
+  "...G.ss....G............",
+  "..G.s.......G...........",
+  "..G.s.......G...........",
+  "..G.........G...........",
+  "..G.........G...........",
+  "..G.........G...........",
+  "...G.......G............",
+  "....G.....G.............",
+  ".....GGGGG..............",
+  "..........HH............",
+  "...........HH...CCC.....",
+  "............HHCCCCCC....",
+  ".............HHCCCCCC...",
+  "..........CC...DCCCCC...",
+  ".........CCC....CCCCCC..",
+  "..........CCC..CCCCCCC..",
+  "...........CCCCCCCCCC...",
+  "............CCCCCCCCC...",
+  ".............CCCCCCD....",
+  "...............CCDD.....",
+];
+
+const PIXEL_COLORS: Record<string, string> = {
+  G: "#c9a53e",
+  s: "#f6f3ea",
+  H: "#a8862c",
+  C: "#e2654a",
+  D: "#b3402a",
+};
+
+function PixelClaw({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 200 200" className={className} aria-hidden>
-      <defs>
-        <path id="sealcircle" d="M 100,100 m -70,0 a 70,70 0 1,1 140,0 a 70,70 0 1,1 -140,0" />
-      </defs>
-      <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" strokeWidth="2" />
-      <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" strokeWidth="1" />
-      <circle cx="100" cy="100" r="52" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <g className="spin-ring">
-        <text fontSize="15.5" letterSpacing="3.5" fill="currentColor" fontFamily="Georgia, serif">
-          <textPath href="#sealcircle" startOffset="0%">
-            CONVICTION BANK · EST. 2026 ·
-          </textPath>
-        </text>
-      </g>
-      <text x="100" y="122" textAnchor="middle" fontSize="58" fontFamily="Georgia, serif" fontWeight="bold" fill="currentColor">
-        CV
-      </text>
+    <svg
+      viewBox={`0 0 ${PIXEL_MAP[0].length} ${PIXEL_MAP.length}`}
+      className={className}
+      shapeRendering="crispEdges"
+      aria-hidden
+    >
+      {PIXEL_MAP.flatMap((row, y) =>
+        [...row].map((c, x) =>
+          PIXEL_COLORS[c] ? <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill={PIXEL_COLORS[c]} /> : null,
+        ),
+      )}
     </svg>
   );
 }
@@ -37,7 +66,9 @@ export default function Home() {
     <main className="min-h-screen">
       {/* Masthead */}
       <header className="max-w-6xl mx-auto px-6 pt-6 flex items-center justify-between">
-        <span className="font-display text-lg font-semibold tracking-tight">Clawdviction</span>
+        <span className="font-display text-lg font-semibold tracking-tight">
+          stake<span className="text-gold-bright">.</span>onedollaraudit<span className="text-gold-bright">.</span>com
+        </span>
         <nav className="flex items-center gap-6 text-sm">
           <a href="#stake" className="smallcaps hover:text-gold-bright transition-colors hidden sm:inline">Stake</a>
           <a href="#commission" className="smallcaps hover:text-gold-bright transition-colors hidden sm:inline">Commission</a>
@@ -50,7 +81,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-20 grid md:grid-cols-[1fr_auto] gap-12 items-center">
         <div>
           <p className="smallcaps text-sm font-semibold text-gold-bright mb-4">
-            The conviction bank · same vault larv.ai stakes into · Base network
+            The staking desk of One Dollar Audit · same vault larv.ai stakes into · Base
           </p>
           <h1 className="font-display text-5xl sm:text-7xl font-semibold leading-[1.05] tracking-tight">
             Stake $CLAWD.
@@ -75,7 +106,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <Seal className="w-56 h-56 lg:w-72 lg:h-72 text-paper/85 shrink-0 mx-auto" />
+        <PixelClaw className="w-56 h-56 lg:w-72 lg:h-72 float-slow shrink-0 mx-auto" />
       </section>
 
       {/* Trust strip */}
@@ -222,13 +253,13 @@ export default function Home() {
       <footer className="bg-lobster-night text-paper/70 py-12 text-sm">
         <div className="max-w-6xl mx-auto px-6 grid sm:grid-cols-3 gap-8">
           <div>
-            <p className="font-display text-paper text-lg mb-2">Clawdviction</p>
+            <p className="font-display text-paper text-lg mb-2">stake.onedollaraudit.com</p>
             <p className="leading-relaxed">
-              The conviction bank — a companion desk to{" "}
+              The staking desk of{" "}
               <a href="https://onedollaraudit.com" className="underline" target="_blank" rel="noopener noreferrer">
                 One Dollar Audit
               </a>{" "}
-              and{" "}
+              — same vault and ledger as{" "}
               <a href="https://larv.ai" className="underline" target="_blank" rel="noopener noreferrer">
                 larv.ai
               </a>
@@ -244,6 +275,14 @@ export default function Home() {
           </div>
           <div className="space-y-2">
             <p className="smallcaps font-semibold text-paper/50">Papers</p>
+            <p>
+              <a
+                href={`https://app.uniswap.org/swap?outputCurrency=${CLAWD_ADDRESS}&chain=base`}
+                className="underline" target="_blank" rel="noopener noreferrer"
+              >
+                Buy $CLAWD (Uniswap)
+              </a>
+            </p>
             <p><a href="/skill.md" className="underline">Agent skill file</a></p>
             <p><a href="/llms.txt" className="underline">llms.txt</a></p>
             <p><a href="https://larv.ai/stake" className="underline" target="_blank" rel="noopener noreferrer">The governance house (larv.ai)</a></p>
@@ -254,7 +293,7 @@ export default function Home() {
           Conviction is not a token, a security, or a promise of yield — it is a
           number that grows while you stake and shrinks when you spend it. An AI
           audit is a serious first pass, not a substitute for a full manual audit
-          on high-value systems. © 2026 Clawdviction.
+          on high-value systems. © 2026 One Dollar Audit.
         </div>
       </footer>
     </main>

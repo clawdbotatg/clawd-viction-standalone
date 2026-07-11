@@ -40,7 +40,7 @@ export default function AuditTracker({ params }: { params: Promise<{ id: string 
   return (
     <main className="min-h-screen max-w-3xl mx-auto px-6 py-12">
       <Link href="/" className="smallcaps text-sm text-paper/70 hover:text-paper">
-        ← Clawdviction
+        ← stake.onedollaraudit.com
       </Link>
 
       <div className="mt-8 border border-line bg-paper text-ink shadow-xl">
