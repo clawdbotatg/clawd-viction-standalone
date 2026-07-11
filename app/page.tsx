@@ -12,6 +12,11 @@ import {
 /* The shop sign: a pixel-art claw inspecting Solidity code through a
  * magnifying glass (public/claw-audit.png). Its flat background is the
  * same color as --color-lobster, so it dissolves into the page. */
+/** 0xC9E377FB…121213bf — long enough to recognize, short enough not to wrap. */
+function shortAddr(a: string): string {
+  return `${a.slice(0, 10)}…${a.slice(-8)}`;
+}
+
 function ClawMark({ className = "" }: { className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -197,8 +202,16 @@ export default function Home() {
               <li>▸ Fee is a fixed share of the largest conviction balance — same price for everyone</li>
               <li>▸ Public engagement record — verifiable by anyone, forever</li>
             </ul>
-            <p className="mt-6 text-xs text-paper/50 font-mono break-all">
-              Jobs contract: {LEFTCLAW_ADDRESS} (Base)
+            <p className="mt-6 text-xs text-paper/50 font-mono">
+              Jobs contract:{" "}
+              <a
+                className="underline"
+                href={`https://basescan.org/address/${LEFTCLAW_ADDRESS}`}
+                target="_blank" rel="noopener noreferrer"
+              >
+                {shortAddr(LEFTCLAW_ADDRESS)}
+              </a>{" "}
+              (Base)
             </p>
             <p className="mt-2 text-xs text-paper/50">
               Prefer to pay a dollar instead?{" "}
@@ -275,11 +288,11 @@ export default function Home() {
               engagement, and report is public and on-chain.
             </p>
           </div>
-          <div className="font-mono text-xs space-y-2 break-all">
+          <div className="font-mono text-xs space-y-2">
             <p className="smallcaps font-sans font-semibold text-paper/50">Addresses · Base</p>
-            <p>Vault: <a className="underline" href={`https://basescan.org/address/${STAKING_ADDRESS}`} target="_blank" rel="noopener noreferrer">{STAKING_ADDRESS}</a></p>
-            <p>$CLAWD: <a className="underline" href={`https://basescan.org/address/${CLAWD_ADDRESS}`} target="_blank" rel="noopener noreferrer">{CLAWD_ADDRESS}</a></p>
-            <p>Jobs: <a className="underline" href={`https://basescan.org/address/${LEFTCLAW_ADDRESS}`} target="_blank" rel="noopener noreferrer">{LEFTCLAW_ADDRESS}</a></p>
+            <p>Vault: <a className="underline" href={`https://basescan.org/address/${STAKING_ADDRESS}`} target="_blank" rel="noopener noreferrer">{shortAddr(STAKING_ADDRESS)}</a></p>
+            <p>$CLAWD: <a className="underline" href={`https://basescan.org/address/${CLAWD_ADDRESS}`} target="_blank" rel="noopener noreferrer">{shortAddr(CLAWD_ADDRESS)}</a></p>
+            <p>Jobs: <a className="underline" href={`https://basescan.org/address/${LEFTCLAW_ADDRESS}`} target="_blank" rel="noopener noreferrer">{shortAddr(LEFTCLAW_ADDRESS)}</a></p>
           </div>
           <div className="space-y-2">
             <p className="smallcaps font-semibold text-paper/50">Papers</p>
