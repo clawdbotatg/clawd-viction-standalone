@@ -215,7 +215,24 @@ export function StakeCard() {
           </button>
         )}
 
-        {mounted && address && !wrongNetwork && (
+        {/* Connected but can't make the minimum deposit → the CTA is to go get CLAWD */}
+        {mounted && address && !wrongNetwork && balance !== undefined && balance < MIN_STAKE_WEI && (
+          <div className="space-y-2">
+            <a
+              href={`https://app.uniswap.org/swap?outputCurrency=${CLAWD_ADDRESS}&chain=base`}
+              target="_blank" rel="noopener noreferrer"
+              className="block w-full py-4 bg-ink text-paper smallcaps text-base font-semibold tracking-wider text-center hover:bg-lobster transition-colors"
+            >
+              Get $CLAWD on Uniswap →
+            </a>
+            <p className="text-xs text-ink-soft text-center">
+              Deposits start at 1,000 CLAWD — your wallet holds{" "}
+              {balance === 0n ? "none yet" : `${fmt(balance)}`}. Swap on Base, then come back.
+            </p>
+          </div>
+        )}
+
+        {mounted && address && !wrongNetwork && !(balance !== undefined && balance < MIN_STAKE_WEI) && (
           <button
             onClick={stake}
             disabled={busy || parsed === 0n || belowMin || insufficient}
@@ -261,7 +278,7 @@ export function StakeCard() {
         )}
 
         <p className="text-xs text-ink-soft/70 leading-relaxed">
-          Deposits are held by the ClawdViction staking contract on Base — no
+          Deposits are held by the staking vault contract on Base — no
           lock-up, no penalty, withdraw any deposit whole at any time. Conviction
           earned is banked on withdrawal, never forfeited.
         </p>

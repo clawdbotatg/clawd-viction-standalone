@@ -12,28 +12,30 @@ import {
 /* Pixel-art claw holding a magnifying glass — the shop sign.
  * Edit the map: G lens rim · s shine · H handle · C claw · D claw shade */
 const PIXEL_MAP = [
-  ".....GGGGG..............",
-  "....G.....G.............",
-  "...G.ss....G............",
-  "..G.s.......G...........",
-  "..G.s.......G...........",
-  "..G.........G...........",
-  "..G.........G...........",
-  "..G.........G...........",
-  "...G.......G............",
-  "....G.....G.............",
-  ".....GGGGG..............",
-  "..........HH............",
-  "...........HH...CCC.....",
-  "............HHCCCCCC....",
-  ".............HHCCCCCC...",
-  "..........CC...DCCCCC...",
-  ".........CCC....CCCCCC..",
-  "..........CCC..CCCCCCC..",
-  "...........CCCCCCCCCC...",
-  "............CCCCCCCCC...",
-  ".............CCCCCCD....",
-  "...............CCDD.....",
+  "...........GGGGG.......",
+  "..........G.....G......",
+  ".........G.ss....G.....",
+  "........G.s.......G....",
+  "........G.s.......G....",
+  "........G.........G....",
+  "........G.........G....",
+  "........G.........G....",
+  ".........G.......G.....",
+  "..........G.....G......",
+  "...........GGGGG.......",
+  "......CC....HH.........",
+  ".....CCCC...HH.........",
+  "....CCCCCC..HH.........",
+  "....CCCCCCC.HH.CCCC....",
+  "....CCCCCCC....CCCCC...",
+  "....CCCCCCCC..CCCCCC...",
+  "....CCCCCCCCCCCCCCCC...",
+  "....CLLCCCCCCCCCCCCC...",
+  "....CCCCCCCCCCCCCCCD...",
+  ".....CCCCCCCCCCCCCD....",
+  "......CCCCCCCCCCCDCC...",
+  "........CCCCCCCD..CCC..",
+  "...........DDDD....DD..",
 ];
 
 const PIXEL_COLORS: Record<string, string> = {
@@ -42,6 +44,7 @@ const PIXEL_COLORS: Record<string, string> = {
   H: "#a8862c",
   C: "#e2654a",
   D: "#b3402a",
+  L: "#f0937c",
 };
 
 function PixelClaw({ className = "" }: { className?: string }) {
@@ -129,7 +132,7 @@ export default function Home() {
             {
               n: "I",
               t: "Make your deposit",
-              d: "Stake 1,000 CLAWD or more into the ClawdViction contract on Base — the same one larv.ai uses. Your tokens stay yours; withdraw any deposit, whole, at any time.",
+              d: "Stake 1,000 CLAWD or more into the vault on Base — the same contract larv.ai uses. Your tokens stay yours; withdraw any deposit, whole, at any time.",
             },
             {
               n: "II",

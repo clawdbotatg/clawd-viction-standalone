@@ -27,7 +27,7 @@ share of the largest conviction balance, same price for everyone.
 
 ## On-chain (Base, eip155:8453)
 
-- ClawdViction vault (staking): 0xC9E377FB98a1aA6Ecf4B553cE1b57940121213bf
+- Staking vault (ClawdVictionStaking): 0xC9E377FB98a1aA6Ecf4B553cE1b57940121213bf
   — stake(amount) min 1,000e18, unstake(stakeIndex), getActiveStakes(address)
 - $CLAWD token: 0x9f86dB9fc6f7c9408e8Fda3Ff8ce4e78ac7a6b07 (18 decimals)
 - Jobs contract: 0xb2fb486a9569ad2c97d9c73936b46ef7fdaa413a

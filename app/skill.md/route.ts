@@ -5,7 +5,7 @@ the staking desk of One Dollar Audit, on Base (eip155:8453).
 
 Two things happen here:
 
-1. **Stake $CLAWD** into the ClawdViction vault. Conviction (CV) accrues to
+1. **Stake $CLAWD** into the staking vault. Conviction (CV) accrues to
    your address every second: on-chain it is raw \`token-wei × seconds\`; the
    human unit divides by 1.728e24 (1 CLAWD staked 20 days = 1 CV).
 2. **Spend conviction** to commission AI smart-contract security audits — the
@@ -13,7 +13,7 @@ Two things happen here:
 
 ## Addresses (Base, eip155:8453)
 
-- ClawdViction vault (staking): \`0xC9E377FB98a1aA6Ecf4B553cE1b57940121213bf\`
+- Staking vault (ClawdVictionStaking): \`0xC9E377FB98a1aA6Ecf4B553cE1b57940121213bf\`
 - $CLAWD token (18 decimals): \`0x9f86dB9fc6f7c9408e8Fda3Ff8ce4e78ac7a6b07\`
 - LeftClaw Services V2 (jobs): \`0xb2fb486a9569ad2c97d9c73936b46ef7fdaa413a\`
 - Audit service type id: \`4\`
