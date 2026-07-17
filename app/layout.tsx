@@ -22,11 +22,20 @@ export const metadata: Metadata = {
     url: "https://stake.onedollaraudit.com",
     siteName: "One Dollar Audit — Stake",
     type: "website",
+    images: [
+      {
+        url: "/og.png",
+        width: 2400,
+        height: 1260,
+        alt: "Pixel-art lobster claw auditing Solidity through a magnifying glass, beside a safe and gold coins — Stake $CLAWD, get free audits.",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "stake.onedollaraudit.com",
     description: "Stake $CLAWD. Get free audits. Conviction accrues every second — spend it on security audits, on Base.",
+    images: ["/og.png"],
   },
 };
 
